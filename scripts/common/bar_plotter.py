@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 
 
-# TODO: inherit from some 2D plotter
 class BarPlotter:
 
     def __init__(self, x_data, y_data):
