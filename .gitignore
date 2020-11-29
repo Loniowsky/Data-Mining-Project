@@ -1,5 +1,7 @@
 **/.idea
 
+# Temporary data file
+**/games_sales_2016_preprocessed.xlsx
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
