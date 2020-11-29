@@ -1,5 +1,5 @@
 from sklearn.cluster import KMeans
-
+import matplotlib.pyplot as plt
 
 def k_means_1d_clustering(dataframe, column, number_of_clusters):
     k_means_data = dataframe[column].to_numpy().reshape(-1, 1)
@@ -20,3 +20,10 @@ def k_means_clustering(dataframe, k_means_data, number_of_clusters):
         cluster_data = dataframe.iloc[current_cluster]
         cluster_indexes.append(cluster_data)
     return cluster_indexes
+
+
+def plot_2d_data_with_clusters(clusters, column_pair):
+    plt.figure()
+    for i, cluster in enumerate(clusters):
+        plt.plot(cluster[column_pair[0]], cluster[column_pair[1]], 'x', label='cluster {}'.format(i))
+    plt.legend()
