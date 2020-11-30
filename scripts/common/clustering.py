@@ -1,6 +1,7 @@
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
+
 def k_means_1d_clustering(dataframe, column, number_of_clusters):
     k_means_data = dataframe[column].to_numpy().reshape(-1, 1)
     return k_means_clustering(dataframe, k_means_data, number_of_clusters)
