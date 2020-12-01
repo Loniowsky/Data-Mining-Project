@@ -27,4 +27,7 @@ def plot_2d_data_with_clusters(clusters, column_pair):
     plt.figure()
     for i, cluster in enumerate(clusters):
         plt.plot(cluster[column_pair[0]], cluster[column_pair[1]], 'x', label='cluster {}'.format(i))
+    plt.xlabel(column_pair[0])
+    plt.ylabel(column_pair[1])
+    plt.title(column_pair)
     plt.legend()

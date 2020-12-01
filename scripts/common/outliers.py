@@ -29,13 +29,26 @@ def drop_outliers_from_dataset(dataframe, outliers):
 
 
 def plot_1d_data_with_outliers(outliers, non_outliers, column):
-    plt.figure()
-    plt.plot(outliers[column], np.zeros_like(outliers[column]), 'x', c='b', label="outliers")
-    plt.plot(non_outliers[column], np.zeros_like(non_outliers[column]), 'x', c='r', label="non-outliers")
-    plt.xlabel(column)
+    plot_data_with_outliers(outliers[column], np.zeros_like(outliers[column]),
+                            non_outliers[column], np.zeros_like(non_outliers[column]), (column, ""))
     plt.yticks([])
+    plt.show()
+
+
+def plot_2d_data_with_outliers(outliers, non_outliers, column_pair):
+    plot_data_with_outliers(outliers[column_pair[0]], outliers[column_pair[1]],
+                            non_outliers[column_pair[0]], non_outliers[column_pair[1]], column_pair)
+    plt.show()
+
+
+def plot_data_with_outliers(outliers_x, outliers_y, non_outliers_x, non_outliers_y, column_names):
+    plt.figure()
+    plt.plot(outliers_x, outliers_y, 'x', c='b', label="outliers")
+    plt.plot(non_outliers_x, non_outliers_y, 'x', c='r', label="non-outliers")
+    plt.xlabel(column_names[0])
+    plt.ylabel(column_names[1])
     plt.legend()
-    plt.title("Outliers detection: {}".format(column))
+    plt.title("Outliers detection: {}{}".format(column_names[0], column_names[1]))
 
 
 def pretty_print_1d_outliers(outliers, column):
@@ -43,3 +56,5 @@ def pretty_print_1d_outliers(outliers, column):
     for index, row in outliers.iterrows():
         print("{}: {}".format(row["Name"], row[column]))
     print()
+
+
