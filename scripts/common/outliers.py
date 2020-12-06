@@ -9,8 +9,8 @@ def find_outliers_in_single_column(dataframe, column, number_of_neighbours, perc
     return nearest_neighbors(nn_data, dataframe, number_of_neighbours, percent_of_outliers)
 
 
-def find_outliers_in_two_columns(dataframe, columns: (str, str), number_of_neighbours, percent_of_outliers):
-    nn_data = dataframe[[columns[0], columns[1]]].to_numpy()
+def find_outliers_in_multiple_columns(dataframe, columns, number_of_neighbours, percent_of_outliers):
+    nn_data = dataframe[columns].to_numpy()
     return nearest_neighbors(nn_data, dataframe, number_of_neighbours, percent_of_outliers)
 
 

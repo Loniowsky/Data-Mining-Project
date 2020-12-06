@@ -7,8 +7,8 @@ def k_means_1d_clustering(dataframe, column, number_of_clusters):
     return k_means_clustering(dataframe, k_means_data, number_of_clusters)
 
 
-def k_means_2d_clustering(dataframe, columns, number_of_clusters):
-    k_means_data = dataframe[[columns[0], columns[1]]].to_numpy()
+def k_means_multiple_dim_clustering(dataframe, columns, number_of_clusters):
+    k_means_data = dataframe[columns].to_numpy()
     return k_means_clustering(dataframe, k_means_data, number_of_clusters)
 
 
