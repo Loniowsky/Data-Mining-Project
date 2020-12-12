@@ -48,7 +48,7 @@ def plot_data_with_outliers(outliers_x, outliers_y, non_outliers_x, non_outliers
     plt.xlabel(column_names[0])
     plt.ylabel(column_names[1])
     plt.legend()
-    plt.title("Outliers detection: {}{}".format(column_names[0], column_names[1]))
+    plt.title("Outliers detection: {}, {}".format(column_names[0], column_names[1]))
 
 
 def pretty_print_1d_outliers(outliers, column):
