@@ -1,6 +1,7 @@
 from sklearn.model_selection import LeaveOneOut
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
+import seaborn as sns
 
 
 def k_neighbours_classification(training_dataset, testing_dataset, number_of_neighbours, target_column):
@@ -25,3 +26,6 @@ def k_neighbours_leave_one_out(dataset, target_column, number_of_neighbours):
         confusion_matrix[actual_class][predicted_class] += 1
     return number_of_correct / dataset.shape[0], confusion_matrix
 
+
+def display_confusion_matrix(matrix):
+    sns.heatmap(matrix, annot=True, cmap="YlOrBr")
