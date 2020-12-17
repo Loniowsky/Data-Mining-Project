@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 class ScatterPlotter:
 
-    def __init__(self, x_data, y_data, colors):
-        plt.figure()
+    def __init__(self, x_data, y_data, colors, x_size=9, y_size=7):
+        plt.figure(figsize=(x_size, y_size))
         plt.scatter(x_data, y_data, c=colors, s=3, cmap="jet_r")
 
     def with_labels(self, x_label, y_label):
