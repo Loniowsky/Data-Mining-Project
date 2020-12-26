@@ -1,13 +1,63 @@
-from sklearn.cluster import KMeans
+from statistics import mean, stdev
+
+from sklearn.cluster import KMeans, AgglomerativeClustering
 import matplotlib.pyplot as plt
 from sklearn import metrics
 import numpy as np
+
+from common.outliers import drop_outliers_from_dataset
 
 
 def k_means_multiple_dim_silhouette(dataframe, columns, number_of_clusters):
     k_means_data = dataframe[columns].to_numpy()
     k_means = KMeans(n_clusters=number_of_clusters).fit(k_means_data)
     return metrics.silhouette_score(k_means_data, k_means.labels_, metric='euclidean')
+
+
+def k_means_multiple_dim_calinski_harabasz(dataframe, columns, number_of_clusters):
+    k_means_data = dataframe[columns].to_numpy()
+    k_means = KMeans(n_clusters=number_of_clusters).fit(k_means_data)
+    return metrics.calinski_harabasz_score(k_means_data, k_means.labels_)
+
+
+def hierarchical_multiple_dim_silhouette(dataframe, columns, number_of_clusters):
+    clustering_data = dataframe[columns].to_numpy()
+    clustering = AgglomerativeClustering(n_clusters=number_of_clusters).fit(clustering_data)
+    return metrics.silhouette_score(clustering_data, clustering.labels_)
+
+
+def hierarchical_multiple_dim_calinski_harabasz(dataframe, columns, number_of_clusters):
+    clustering_data = dataframe[columns].to_numpy()
+    clustering = AgglomerativeClustering(n_clusters=number_of_clusters).fit(clustering_data)
+    return metrics.calinski_harabasz_score(clustering_data, clustering.labels_)
+
+
+def perform_clustering_score_analysis(dataframe, columns, numbers_of_clusters, score_strategy, outliers, repetitions):
+    score_values = []
+    error_values = []
+    for number_of_clusters in numbers_of_clusters:
+        current_number_of_clusters_scores = []
+        for repetition in range(repetitions):
+            data_without_outliers = drop_outliers_from_dataset(dataframe, outliers)
+            silhouette_value = score_strategy(data_without_outliers, columns, number_of_clusters)
+            current_number_of_clusters_scores.append(silhouette_value)
+        mean_current_score = mean(current_number_of_clusters_scores)
+        error_current_score = stdev(current_number_of_clusters_scores)
+        print("Score for {} clusters {} (+-{})".format(number_of_clusters, mean_current_score, error_current_score))
+        score_values.append(mean_current_score)
+        error_values.append(error_current_score)
+    return score_values, error_values
+
+
+def plot_clustering_scores(numbers_of_clusters, scores, errors, method_names, score_name):
+    plt.figure()
+    plt.title("Clustering score: {}".format(score_name))
+    plt.xlabel("Number of clusters")
+    plt.ylabel("{} score value".format(score_name))
+    for index, method in enumerate(method_names):
+        plt.errorbar(numbers_of_clusters, scores[index], yerr=errors[index], label=method_names[index])
+    plt.legend()
+    plt.show()
 
 
 def k_means_1d_clustering(dataframe, column, number_of_clusters):
