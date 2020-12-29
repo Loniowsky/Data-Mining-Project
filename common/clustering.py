@@ -1,11 +1,10 @@
-from statistics import mean, stdev
-
-from sklearn.cluster import KMeans, AgglomerativeClustering
-import matplotlib.pyplot as plt
-from sklearn import metrics
-import numpy as np
-
 from common.outliers import drop_outliers_from_dataset
+from statistics import mean, stdev
+from sklearn.cluster import KMeans, AgglomerativeClustering
+from scipy.cluster.hierarchy import dendrogram
+from sklearn import metrics
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def k_means_multiple_dim_silhouette(dataframe, columns, number_of_clusters):
@@ -75,6 +74,12 @@ def k_means_clustering(dataframe, k_means_data, number_of_clusters):
     return dataframe.assign(cluster=k_means.labels_)
 
 
+def hierarchical_clustering(dataframe, columns, number_of_clusters):
+    clustering_data = dataframe[columns].to_numpy()
+    clustering = AgglomerativeClustering(n_clusters=number_of_clusters).fit(clustering_data)
+    return dataframe.assign(cluster=clustering.labels_)
+
+
 def plot_1d_data_with_clusters(clustered_data, column_name):
     plt.figure()
     number_of_clusters = clustered_data["cluster"].max() + 1
@@ -113,3 +118,15 @@ def plot_means_in_clusters_for_given_column(clustered_data, means_table, column)
     plt.xticks(range(0, number_of_clusters))
     plt.ylabel("Mean {}".format(column))
     plt.show()
+
+
+def plot_dendrogram_for_hierarchical_clustering(model, **kwargs):
+    counts = np.zeros(model.children_.shape[0])
+    n_samples = len(model.labels_)
+    for i, merge in enumerate(model.children_):
+        current_count = 0
+        for child_idx in merge:
+            current_count += (1 if child_idx < n_samples else counts[child_idx - n_samples])
+        counts[i] = current_count
+    linkage_matrix = np.column_stack([model.children_, model.distances_, counts]).astype(float)
+    dendrogram(linkage_matrix, **kwargs)
