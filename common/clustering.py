@@ -3,6 +3,7 @@ from statistics import mean, stdev
 from sklearn.cluster import KMeans, AgglomerativeClustering
 from scipy.cluster.hierarchy import dendrogram
 from sklearn import metrics
+import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -109,14 +110,12 @@ def plot_2d_data_with_clusters(clustered_data, column_pair):
     plt.show()
 
 
-def plot_means_in_clusters_for_given_column(clustered_data, means_table, column):
-    plt.figure()
-    number_of_clusters = clustered_data["cluster"].max() + 1
-    plt.bar(means_table.index, means_table[column])
-    plt.title("Mean {} for each cluster".format(column))
-    plt.xlabel("Cluster number")
-    plt.xticks(range(0, number_of_clusters))
-    plt.ylabel("Mean {}".format(column))
+def plot_means_in_clusters_for_given_column(clustered_data, column, y_range=None, colors=None):
+    ax = sns.barplot(x="cluster", y=column, data=clustered_data, ci=None, palette=colors)
+    if y_range:
+        ax.set(ylim=y_range)
+    ax.set(xlabel="Cluster number", ylabel="Mean {}".format(column),
+           title="Mean {} for each cluster".format(column))
     plt.show()
 
 
