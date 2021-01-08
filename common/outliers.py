@@ -35,6 +35,13 @@ def plot_1d_data_with_outliers(outliers, non_outliers, column):
     plt.show()
 
 
+def plot_hist_1d_data_with_outliers(outliers, non_outliers, column):
+    plot_hist_data_with_outliers(outliers[column], np.zeros_like(outliers[column]),
+                                 non_outliers[column], np.zeros_like(non_outliers[column]), (column, ""))
+    plt.yticks([])
+    plt.show()
+
+
 def plot_2d_data_with_outliers(outliers, non_outliers, column_pair):
     plot_data_with_outliers(outliers[column_pair[0]], outliers[column_pair[1]],
                             non_outliers[column_pair[0]], non_outliers[column_pair[1]], column_pair)
@@ -45,6 +52,15 @@ def plot_data_with_outliers(outliers_x, outliers_y, non_outliers_x, non_outliers
     plt.figure()
     plt.plot(outliers_x, outliers_y, 'x', c='b', label="outliers")
     plt.plot(non_outliers_x, non_outliers_y, 'x', c='r', label="non-outliers")
+    plt.xlabel(column_names[0])
+    plt.ylabel(column_names[1])
+    plt.legend()
+    plt.title("Outliers detection: {}, {}".format(column_names[0], column_names[1]))
+
+def plot_hist_data_with_outliers(outliers_x, outliers_y, non_outliers_x, non_outliers_y, column_names):
+    plt.figure()
+    plt.hist(outliers_x, outliers_y, 'x', c='b', label="outliers")
+    plt.hist(non_outliers_x, non_outliers_y, 'x', c='r', label="non-outliers")
     plt.xlabel(column_names[0])
     plt.ylabel(column_names[1])
     plt.legend()
