@@ -1,9 +1,6 @@
 from sklearn.model_selection import LeaveOneOut
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import tree
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
 
 
 def k_neighbours_classification(training_dataset, testing_dataset, number_of_neighbours, target_column):
@@ -23,8 +20,6 @@ def decision_tree_classification(training_dataset, testing_dataset, target_colum
 def classification_leave_one_out(dataset, target_column, classifier):
     leave_one_out = LeaveOneOut()
     number_of_correct = 0
-    number_of_classes = dataset[target_column].max() + 1
-    confusion_matrix = np.zeros((number_of_classes, number_of_classes))
     for train_index, test_index in leave_one_out.split(dataset):
         dataset_train = dataset.iloc[train_index]
         dataset_test = dataset.iloc[test_index]
@@ -32,8 +27,7 @@ def classification_leave_one_out(dataset, target_column, classifier):
         predicted_class = classification_result[0]
         actual_class = dataset_test[target_column].iloc[0]
         number_of_correct = number_of_correct + (1 if predicted_class == actual_class else 0)
-        confusion_matrix[actual_class][predicted_class] += 1
-    return number_of_correct / dataset.shape[0], confusion_matrix
+    return number_of_correct / dataset.shape[0]
 
 
 def k_neighbours_leave_one_out(dataset, target_column, number_of_neighbours):
@@ -46,8 +40,3 @@ def decision_tree_leave_one_out(dataset, target_column):
     return classification_leave_one_out(dataset, target_column,
                                         lambda dataset_train, dataset_test: decision_tree_classification(
                                             dataset_train, dataset_test, target_column))
-
-
-def display_confusion_matrix(matrix):
-    plt.figure()
-    sns.heatmap(matrix, annot=True, cmap="YlOrBr")
