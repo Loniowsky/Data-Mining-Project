@@ -1,6 +1,9 @@
 from sklearn.model_selection import LeaveOneOut
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import tree
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 def k_neighbours_classification(training_dataset, testing_dataset, number_of_neighbours, target_column):
@@ -40,3 +43,16 @@ def decision_tree_leave_one_out(dataset, target_column):
     return classification_leave_one_out(dataset, target_column,
                                         lambda dataset_train, dataset_test: decision_tree_classification(
                                             dataset_train, dataset_test, target_column))
+
+
+def decision_tree_plot_decision_surfaces(classifier, data, column_pair, palette):
+    plt.figure()
+    x_min, x_max = data[column_pair[0]].min() - 0.1, data[column_pair[0]].max() + 0.1
+    y_min, y_max = data[column_pair[1]].min() - 0.1, data[column_pair[1]].max() + 0.1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
+                         np.arange(y_min, y_max, 0.01))
+    plt.tight_layout(h_pad=0.5, w_pad=0.5, pad=2.5)
+    z = classifier.predict(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
+    plt.contourf(xx, yy, z, cmap=plt.cm.Greens)
+    sns.scatterplot(data=data, x=column_pair[0], y=column_pair[1], hue="cluster", palette=palette)
+    plt.show()
